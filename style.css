@@ -13,6 +13,18 @@ body {
     color: white;
     overflow: hidden;
 }
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 40px;
+    width: 100%;
+    max-width: 330px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 330px;   /* 👈 FIX: make it visible */
+}
+
 
 .container {
     width: 90%;
@@ -121,4 +133,5 @@ body {
     from { transform: translateY(20px) scale(0.8); opacity: 1; }
     to { transform: translateY(-120vh) scale(1.4); opacity: 0; }
 }
+
 
