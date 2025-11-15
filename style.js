@@ -1,3 +1,5 @@
+console.log("JS loaded successfully!");
+
 const boardEl = document.getElementById("board");
 const messageEl = document.getElementById("message");
 const resetBtn = document.getElementById("reset");
@@ -23,19 +25,19 @@ function createBoard() {
     const c = document.createElement("div");
     c.className = "cell";
     c.dataset.index = i;
-    c.addEventListener("click", handleClick);
+    c.onclick = handleClick;  // 👈 FIXED: use onclick instead of addEventListener
     boardEl.appendChild(c);
   }
 }
 
-function handleClick(e) {
+function handleClick(event) {
   if (!running) return;
 
-  const index = e.target.dataset.index;
+  const index = event.target.dataset.index;
   if (board[index] !== null) return;
 
   board[index] = turn;
-  e.target.textContent = turn;
+  event.target.textContent = turn;
 
   if (checkWin(turn)) {
     showWin(turn);
@@ -49,7 +51,6 @@ function handleClick(e) {
     return;
   }
 
-  // Switch turn
   turn = turn === "💖" ? "🌙" : "💖";
 }
 
@@ -73,19 +74,8 @@ function showWin(symbol) {
   });
 }
 
-// Floating hearts generator
-setInterval(() => {
-  const h = document.createElement("div");
-  h.classList.add("heart");
-  h.innerHTML = "💜";
-  h.style.left = Math.random() * 100 + "%";
-  h.style.animationDuration = (3 + Math.random() * 2) + "s";
-  document.querySelector(".hearts").appendChild(h);
-
-  setTimeout(() => h.remove(), 5000);
-}, 500);
-
-resetBtn.addEventListener("click", createBoard);
+resetBtn.onclick = createBoard;
 
 createBoard();
 
+ 
