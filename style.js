@@ -1,81 +1,35 @@
-console.log("JS loaded successfully!");
+const btn = document.getElementById("pickBtn");
+const result = document.getElementById("result");
+const loading = document.getElementById("loading");
 
-const boardEl = document.getElementById("board");
-const messageEl = document.getElementById("message");
-const resetBtn = document.getElementById("reset");
-
-let board = Array(9).fill(null);
-let turn = "💖"; // Ben
-let running = true;
-
-const winPatterns = [
-  [0,1,2], [3,4,5], [6,7,8],
-  [0,3,6], [1,4,7], [2,5,8],
-  [0,4,8], [2,4,6]
+const options = [
+    "🎬 Movie: 'The Guy Who Said He'd Sleep Early' — Horror",
+    "🍿 Episode 1: When You Press 'Skip Intro' But It Skips Too Much",
+    "🤣 Documentary: People Who Say 'I'm Not Hungry' Then Eat Your Food",
+    "📺 Show: 'WiFi Drops For 0.2 Seconds' — Drama",
+    "😐 Reality TV: Your Life When You Forget Your Charger",
+    "🔥 Action: The Remote Is On The Other Side Of The Couch",
+    "🧠 Sci-Fi: You Trying To Understand Math At 2AM",
+    "🤡 Comedy: Group Project But Only One Person Works",
+    "🕵️‍♂️ Mystery: Where Did All My Money Go?",
+    "⚡ Thriller: Phone Battery 1% And No Charger Anywhere",
+    "🍩 Special: The Snack You Saved For Later… Gone.",
+    "😴 Episode: Falling Asleep After Saying 'One More Episode'",
+    "💀 Documentary: When Autocorrect Embarrasses You",
+    "😂 Stand-up: The Teacher Calling You When You're Not Ready",
+    "📢 Breaking News: You Open The Fridge For The 10th Time"
 ];
 
-function createBoard() {
-  boardEl.innerHTML = "";
-  board = Array(9).fill(null);
-  running = true;
-  turn = "💖";
-  messageEl.textContent = "";
-  
-  for (let i = 0; i < 9; i++) {
-    const c = document.createElement("div");
-    c.className = "cell";
-    c.dataset.index = i;
-    c.onclick = handleClick;  // 👈 FIXED: use onclick instead of addEventListener
-    boardEl.appendChild(c);
-  }
-}
+btn.addEventListener("click", () => {
+    result.style.opacity = 0;
+    loading.style.display = "block";
 
-function handleClick(event) {
-  if (!running) return;
+    setTimeout(() => {
+        const random = Math.floor(Math.random() * options.length);
+        result.textContent = options[random];
+        result.style.opacity = 1;
+        loading.style.display = "none";
+    }, 1000);
+});
 
-  const index = event.target.dataset.index;
-  if (board[index] !== null) return;
 
-  board[index] = turn;
-  event.target.textContent = turn;
-
-  if (checkWin(turn)) {
-    showWin(turn);
-    running = false;
-    return;
-  }
-
-  if (board.every(v => v !== null)) {
-    messageEl.textContent = "Aww it's a tie 🤍 cuddle time";
-    running = false;
-    return;
-  }
-
-  turn = turn === "💖" ? "🌙" : "💖";
-}
-
-function checkWin(symbol) {
-  return winPatterns.some(pattern =>
-    pattern.every(i => board[i] === symbol)
-  );
-}
-
-function showWin(symbol) {
-  messageEl.textContent = symbol === "💖"
-    ? "Ben wins! 💖💜"
-    : "Bati wins! 🌙💜";
-
-  winPatterns.forEach(pattern => {
-    if (pattern.every(i => board[i] === symbol)) {
-      pattern.forEach(i => {
-        boardEl.children[i].classList.add("win");
-      });
-    }
-  });
-}
-
-resetBtn.onclick = createBoard;
-
-createBoard();
-
- 
